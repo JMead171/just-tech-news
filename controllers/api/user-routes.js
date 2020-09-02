@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { User, Post, Vote, Comment } = require("../../models");
+const withAuth = require('../../utils/auth');
 
 
 // GET /api/users
@@ -92,6 +93,7 @@ router.post('/login', (req, res) => {
     }
 
     const validPassword = dbUserData.checkPassword(req.body.password);
+    console.log("Check PW: ", req.body.password);
     if (!validPassword) {
       res.status(400).json({ message: 'Incorrect password!' });
       return;
@@ -122,7 +124,6 @@ router.post('/logout', (req, res) => {
 // PUT /api/users/1
 router.put('/:id', (req, res) => {
     // expects {username: 'Lernantino', email: 'lernantino@gmail.com', password: 'password1234'}
-  
     // if req.body has exact key/value pairs to match the model, you can just use `req.body` instead
     User.update(req.body, {
       individualHooks: true,
